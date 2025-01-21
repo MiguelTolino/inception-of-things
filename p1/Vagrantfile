@@ -6,14 +6,15 @@ Vagrant.configure("2") do |config|
   if os =~ /linux/
     config.vm.box = "ubuntu/focal64"  # Box for Linux
     config.vm.provider "virtualbox" do |vb|
-      vb.memory = "4096"  # Example memory configuration for VirtualBox on Linux
+      vb.memory = "1024"  # Example memory configuration for VirtualBox on Linux
     end
   # Configuration specific to macOS
   elsif os =~ /darwin/
     config.vm.box = "perk/ubuntu-22.10-arm64"  # Box for macOS
     config.vm.provider "qemu" do |qemu|
-      qemu.memory = "2048"  # Example memory configuration for QEMU on macOS
+      qemu.memory = "1024"  # Example memory configuration for QEMU on macOS
     end
+    config.vm.provision "file", source: ".", destination: "."  # Copy the gitconfig file to the VM
   else
     raise "Unsupported operating system. Only Linux or macOS is allowed."
   end
