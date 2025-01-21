@@ -1,41 +1,23 @@
+# Vagrantfile Configuration
+# Specify Vagrant configuration version
 Vagrant.configure("2") do |config|
-  # Detect the operating system
-  os = RbConfig::CONFIG['host_os']
 
-  # Define a base configuration for the VM
-  base_config = lambda do |vm_config|
-    if os =~ /linux/
-      vm_config.vm.box = "ubuntu/focal64"  # Box for Linux
-      vm_config.vm.provider "virtualbox" do |vb|
-        vb.memory = "1024"  # Example memory configuration for VirtualBox on Linux
-        vb.cpus = 1  # Example CPU configuration for VirtualBox on Linux
-      end
-    elsif os =~ /darwin/
-      vm_config.vm.box = "perk/ubuntu-22.10-arm64"  # Box for macOS
-      vm_config.vm.provider "qemu" do |qemu|
-        qemu.memory = "1024"  # Example memory configuration for QEMU on macOS
-        qemu.cpus = 1  # Example CPU configuration for QEMU on macOS
-        vm_config.vm.provision "file", source: ".", destination: "."  # Copy the gitconfig file to the VM
-      end
-    else
-      raise "Unsupported operating system. Only Linux or macOS is allowed."
+  # Define the first virtual machine
+  config.vm.define "S" do |vm1|
+    vm1.vm.box = "ubuntu/focal64"  # Ubuntu 20.04 (Focal Fossa)
+    vm1.vm.hostname = "S"
+    vm1.vm.provider "virtualbox" do |vb|
+      vb.memory = "512"  # Set memory to 1024 MB
     end
   end
 
-  # Configuration for the first VM with hostname "S"
-  config.vm.define "S" do |vm1|
-    base_config.call(vm1)
-    vm1.vm.hostname = "S"
-    vm1.vm.network "public_network", ip: "192.168.56.110"
-  end
-
-  # Configuration for the second VM with hostname "SW"
+  # Define the second virtual machine
   config.vm.define "SW" do |vm2|
-    base_config.call(vm2)
+    vm2.vm.box = "ubuntu/focal64"  # Ubuntu 20.04 (Focal Fossa)
     vm2.vm.hostname = "SW"
-    vm2.vm.network "public_network", ip: "192.168.56.111"
+    vm2.vm.provider "virtualbox" do |vb|
+      vb.memory = "512"  # Set memory to 1024 MB
+    end
   end
 
-  # Add more VMs as needed
-  # config.vm.define "vm3", &base_config
 end
