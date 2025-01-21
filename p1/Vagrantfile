@@ -1,0 +1,20 @@
+Vagrant.configure("2") do |config|
+  # Detectar el sistema operativo
+  os = RbConfig::CONFIG['host_os']
+
+  # Configuración específica para Linux
+  if os =~ /linux/
+    config.vm.box = "ubuntu/bionic64"  # Caja para Linux
+    config.vm.provider "virtualbox" do |vb|
+      vb.memory = "4096"  # Ejemplo de configuración de memoria para VirtualBox en Linux
+    end
+  # Configuración específica para macOS
+  elsif os =~ /darwin/
+    config.vm.box = "perk/ubuntu-22.10-arm64"  # Caja para macOS
+    config.vm.provider "qemu" do |qemu|
+      qemu.memory = "2048"  # Ejemplo de configuración de memoria para QEMU en macOS
+    end
+  else
+    raise "Sistema operativo no soportado. Solo se permite Linux o macOS."
+  end
+end
