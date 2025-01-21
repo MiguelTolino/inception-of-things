@@ -1,21 +1,23 @@
+# Vagrantfile Configuration
+# Specify Vagrant configuration version
 Vagrant.configure("2") do |config|
-  # Detect the operating system
-  os = RbConfig::CONFIG['host_os']
 
-  # Configuration specific to Linux
-  if os =~ /linux/
-    config.vm.box = "ubuntu/focal64"  # Box for Linux
-    config.vm.provider "virtualbox" do |vb|
-      vb.memory = "1024"  # Example memory configuration for VirtualBox on Linux
+  # Define the first virtual machine
+  config.vm.define "S" do |vm1|
+    vm1.vm.box = "ubuntu/focal64"  # Ubuntu 20.04 (Focal Fossa)
+    vm1.vm.hostname = "S"
+    vm1.vm.provider "virtualbox" do |vb|
+      vb.memory = "512"  # Set memory to 1024 MB
     end
-  # Configuration specific to macOS
-  elsif os =~ /darwin/
-    config.vm.box = "perk/ubuntu-22.10-arm64"  # Box for macOS
-    config.vm.provider "qemu" do |qemu|
-      qemu.memory = "1024"  # Example memory configuration for QEMU on macOS
-    end
-    config.vm.provision "file", source: ".", destination: "."  # Copy the gitconfig file to the VM
-  else
-    raise "Unsupported operating system. Only Linux or macOS is allowed."
   end
+
+  # Define the second virtual machine
+  config.vm.define "SW" do |vm2|
+    vm2.vm.box = "ubuntu/focal64"  # Ubuntu 20.04 (Focal Fossa)
+    vm2.vm.hostname = "SW"
+    vm2.vm.provider "virtualbox" do |vb|
+      vb.memory = "512"  # Set memory to 1024 MB
+    end
+  end
+
 end
