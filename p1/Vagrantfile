@@ -17,11 +17,14 @@ sudo echo "192.168.56.111  mmateoSW" | sudo tee -a /etc/hosts
 K3S_URL=https://192.168.56.110:6443
 K3S_TOKEN=$(cat #{$shared_folder}/node-token)
 
+# Wait for the server to be fully up
+sleep 30
+
 curl -sfL https://get.k3s.io | K3S_URL=$K3S_URL K3S_TOKEN=$K3S_TOKEN sh -s - agent --node-ip=192.168.56.111
 SCRIPT
 
 $box = "ubuntu/focal64"  # Ubuntu 20.04 (Focal Fossa)
-$agent_memory = "512"  # Set memory to 512 MB
+$agent_memory = "1024"  # Set memory to 512 MB
 $server_memory = "2048"  # Set memory to 2048 MB (2 GB)
 $server_cpus = 2  # Set CPUs to 2
 
@@ -35,7 +38,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "mmateoS" do |vm1|
     vm1.vm.box = $box  # Ubuntu 20.04 (Focal Fossa)
     vm1.vm.hostname = $server_name
-    vm1.vm.network "private_network", ip: "192.168.56.110", nic_type: "virtio", auto_config: true
+    vm1.vm.network "private_network", ip: "192.168.56.110"
     vm1.vm.provision "shell", inline: $server_script
     vm1.vm.provider "virtualbox" do |vb|
       vb.memory = $server_memory  # Set memory to 2048 MB
@@ -47,7 +50,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "mmateoSW" do |vm2|
     vm2.vm.box = $box  # Ubuntu 20.04 (Focal Fossa)
     vm2.vm.hostname = $agent_name
-    vm2.vm.network "private_network", ip: "192.168.56.111", nic_type: "virtio", auto_config: true
+    vm2.vm.network "private_network", ip: "192.168.56.111"
     vm2.vm.provision "shell", inline: $agent_script
     vm2.vm.provider "virtualbox" do |vb|
       vb.memory = $agent_memory  # Set memory to 512 MB
