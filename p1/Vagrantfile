@@ -1,26 +1,43 @@
 # Vagrantfile Configuration
+
+$server_script = <<-SCRIPT
+curl -sfL https://get.k3s.io | sh - 
+# Check for Ready node, takes ~30 seconds 
+sudo k3s kubectl get node
+SCRIPT
+
+$agent_script = <<-SCRIPT
+curl -sfL https://get.k3s.io | sh - 
+# Check for Ready node, takes ~30 seconds
+sudo k3s kubectl get node
+SCRIPT
+
+$box = "ubuntu/focal64"  # Ubuntu 20.04 (Focal Fossa)
+$memory = "512"  # Set memory to 512 MB
+
+
 # Specify Vagrant configuration version
 Vagrant.configure("2") do |config|
 
   # Define the first virtual machine
   config.vm.define "mmateoS", primary: true do |vm1|
-    vm1.vm.box = "ubuntu/focal64"  # Ubuntu 20.04 (Focal Fossa)
+    vm1.vm.box = $box  # Ubuntu 20.04 (Focal Fossa)
     vm1.vm.hostname = "S"
     vm1.vm.network "private_network", ip: "192.168.56.110"
-    vm1.vm.provision "shell", path: "install_k3s.sh"
+    config.vm.provision "shell", inline: $server_script
     vm1.vm.provider "virtualbox" do |vb|
-      vb.memory = "512"  # Set memory to 512 MB
+      vb.memory = $memory  # Set memory to 512 MB
     end
   end
 
   # Define the second virtual machine
   config.vm.define "mmateoSW" do |vm2|
-    vm2.vm.box = "ubuntu/focal64"  # Ubuntu 20.04 (Focal Fossa)
+    vm2.vm.box = $box  # Ubuntu 20.04 (Focal Fossa)
     vm2.vm.hostname = "SW"
     vm2.vm.network "private_network", ip: "192.168.56.111"
-    vm2.vm.provision "shell", path: "install_k3s.sh"
+    vm2.vm.provision "shell", inline: $agent_script
     vm2.vm.provider "virtualbox" do |vb|
-      vb.memory = "512"  # Set memory to 512 MB
+      vb.memory = $memory  # Set memory to 512 MB
     end
   end
 
