@@ -1,20 +1,17 @@
 # Vagrantfile Configuration
 $server_name = "mmateoS"
 $agent_name = "mmateoSW"
-$server_token = "12345"
 
 $server_script = <<-SCRIPT
-ufw disable
-curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server" sh -s - --flannel-backend none --token #{$server_token}
-# Check for Ready node, takes ~30 seconds 
-sudo k3s kubectl get nodes
+sudo ufw disable
+sudo echo "192.168.56.110  mmateoS" | sudo tee -a /etc/hosts
+curl -sfL https://get.k3s.io | K3S_TOKEN=12345 sh -s - server --flannel-backend none
 SCRIPT
 
 $agent_script = <<-SCRIPT
-ufw disable
-curl -sfL https://get.k3s.io | K3S_URL=https://#{$server_name}:6443 K3S_TOKEN=#{$server_token} sh -s -
-# Check for Ready node, takes ~30 seconds
-sudo k3s kubectl get node
+sudo ufw disable
+sudo echo "192.168.56.111  mmateoSW" | sudo tee -a /etc/hosts
+curl -sfL https://get.k3s.io | K3S_URL=https://192.168.56.110 sh -s - agent --token 12345
 SCRIPT
 
 $box = "ubuntu/focal64"  # Ubuntu 20.04 (Focal Fossa)
@@ -22,18 +19,17 @@ $agent_memory = "512"  # Set memory to 512 MB
 $server_memory = "2048"  # Set memory to 2048 MB (2 GB)
 $server_cpus = 2  # Set CPUs to 2
 
-
 # Specify Vagrant configuration version
 Vagrant.configure("2") do |config|
 
   # Define the first virtual machine
-  config.vm.define "mmateoS", primary: true do |vm1|
+  config.vm.define "mmateoS" do |vm1|
     vm1.vm.box = $box  # Ubuntu 20.04 (Focal Fossa)
     vm1.vm.hostname = $server_name
-    vm1.vm.network "private_network", ip: "192.168.56.110"
+    vm1.vm.network "private_network", ip: "192.168.56.110", nic_type: "virtio", auto_config: true
     vm1.vm.provision "shell", inline: $server_script
     vm1.vm.provider "virtualbox" do |vb|
-      vb.memory = $server_memory  # Set memory to 512 MB
+      vb.memory = $server_memory  # Set memory to 2048 MB
       vb.cpus = $server_cpus  # Set CPUs to 2
     end
   end
@@ -42,7 +38,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "mmateoSW" do |vm2|
     vm2.vm.box = $box  # Ubuntu 20.04 (Focal Fossa)
     vm2.vm.hostname = $agent_name
-    vm2.vm.network "private_network", ip: "192.168.56.111"
+    vm2.vm.network "private_network", ip: "192.168.56.111", nic_type: "virtio", auto_config: true
     vm2.vm.provision "shell", inline: $agent_script
     vm2.vm.provider "virtualbox" do |vb|
       vb.memory = $agent_memory  # Set memory to 512 MB
