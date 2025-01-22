@@ -9,6 +9,11 @@ sudo ufw disable
 sudo echo "192.168.56.110  mmateoS" | sudo tee -a /etc/hosts
 curl -sfL https://get.k3s.io | sh -s - server --node-ip=192.168.56.110
 sudo cat /var/lib/rancher/k3s/server/node-token > #{$shared_folder}/node-token
+
+sudo ip link add eth1 type dummy || { echo "Failed to add eth1"; exit 1; }
+sudo ip addr add 192.168.56.110/24 dev eth1 || { echo "Failed to assign IP to eth1"; exit 1; }
+sudo ip link set eth1 up || { echo "Failed to bring up eth1"; exit 1; }
+
 SCRIPT
 
 $agent_script = <<-SCRIPT
@@ -21,6 +26,18 @@ K3S_TOKEN=$(cat #{$shared_folder}/node-token)
 sleep 30
 
 curl -sfL https://get.k3s.io | K3S_URL=$K3S_URL K3S_TOKEN=$K3S_TOKEN sh -s - agent --node-ip=192.168.56.111
+
+# The command "sudo ip link" add eth1 type dummy creates a virtual network interface named eth1
+# The command "sudo ip addr" add 192.168.56.111/24 dev eth1 assigns the IP address 192.168.56.111 with a subnet mask of /24
+# The final part, sudo ip link set eth1 up, activates the eth1 interface.
+
+sudo ip link add eth1 type dummy || { echo "Failed to add eth1"; exit 1; }
+sudo ip addr add 192.168.56.111/24 dev eth1 || { echo "Failed to assign IP to eth1"; exit 1; }
+sudo ip link set eth1 up || { echo "Failed to bring up eth1"; exit 1; }
+
+# Remove the node-token file
+rm -f #{$shared_folder}/node-token
+
 SCRIPT
 
 $box = "ubuntu/focal64"  # Ubuntu 20.04 (Focal Fossa)
