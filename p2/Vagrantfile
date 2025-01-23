@@ -1,0 +1,28 @@
+$server_script = <<-SCRIPT
+sudo ufw disable
+sudo echo "192.168.56.110  mmateoS" | sudo tee -a /etc/hosts
+curl -sfL https://get.k3s.io | sh -s - server --node-ip=192.168.56.110
+sudo apt-get update
+sudo apt-get install -y nginx
+sudo systemctl start nginx
+SCRIPT
+
+$box = "ubuntu/focal64"  # Ubuntu 20.04 (Focal Fossa)
+$server_memory = "2048"  # Set memory to 2048 MB (2 GB)
+$server_cpus = 2  # Set CPUs to 2
+
+# Specify Vagrant configuration version
+Vagrant.configure("2") do |config|
+
+  # Define the first virtual machine
+  config.vm.define "mmateoS" do |vm1|
+    vm1.vm.box = $box  # Ubuntu 20.04 (Focal Fossa)
+    vm1.vm.network "private_network", ip: "192.168.56.110"
+    vm1.vm.provision "shell", inline: $server_script
+    vm1.vm.provider "virtualbox" do |vb|
+      vb.memory = $server_memory  # Set memory to 2048 MB
+      vb.cpus = $server_cpus  # Set CPUs to 2
+    end
+  end
+
+end
