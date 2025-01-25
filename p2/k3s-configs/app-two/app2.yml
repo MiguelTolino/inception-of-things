@@ -32,4 +32,4 @@ spec:
   - protocol: TCP
     port: 80
     targetPort: 5678
-  type: LoadBalancer
+  type: ClusterIP

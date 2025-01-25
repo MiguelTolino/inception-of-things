@@ -2,8 +2,7 @@ $server_script = <<-SCRIPT
 sudo ufw disable
 sudo echo "192.168.56.110  mmateoS" | sudo tee -a /etc/hosts
 curl -sfL https://get.k3s.io | sh -s - server --node-ip=192.168.56.110
-kubectl apply -f /vagrant/k3s-configs/nginx/nginx-deployment.yml
-kubectl apply -f /vagrant/k3s-configs/nginx/nginx-service.yml
+kubectl apply -f /vagrant/k3s-configs/traefik/app-ingress.yml
 kubectl apply -f /vagrant/k3s-configs/app-one/app1.yml
 kubectl apply -f /vagrant/k3s-configs/app-two/app2.yml
 kubectl apply -f /vagrant/k3s-configs/app-three/app3.yml
