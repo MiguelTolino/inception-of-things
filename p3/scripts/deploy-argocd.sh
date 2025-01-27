@@ -64,6 +64,9 @@ argocd app create $APP_NAME \
 echo "🔄 Sincronizando aplicación..."
 argocd app sync $APP_NAME
 
+# 11. Port-forward de la aplicación
+kubectl port-forward svc/my-app-service 8888:8888 -n $APP_NS >/dev/null 2>&1 &
+
 # 11. Mostrar información
 echo -e "\n✅ ¡Despliegue completado!"
 echo "======================================"
