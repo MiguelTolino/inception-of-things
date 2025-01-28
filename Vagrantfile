@@ -12,6 +12,8 @@ Vagrant.configure("2") do |config|
 
     # Allocate 4 CPU cores
     vb.cpus = 4
+
+    vb.name = "Ubuntu VM"
   end
 
   # Install a desktop environment (e.g., GNOME)
@@ -34,7 +36,4 @@ Vagrant.configure("2") do |config|
     # Instalamos herramientas adicionales
     sudo apt-get install -y git vim unzip wget
   SHELL
-
-  # Forward a port for remote access (optional)
-  config.vm.network "forwarded_port", guest: 3389, host: 3389
 end
