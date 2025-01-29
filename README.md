@@ -1,119 +1,65 @@
 # Inception of Things
 
-## Overview
+This project demonstrates the setup of a Kubernetes development environment using K3d and ArgoCD for continuous deployment. The project automates the deployment of a web application using GitOps principles.
 
-Welcome to the Inception of Things project! This project is part of the 42Cursus and aims to provide a comprehensive understanding of various technologies and their integration.
+## 🚀 Installation
+```sh
+# Clone the repository
+git clone https://github.com/your-username/inception-of-things.git
 
-## Todo
-
-- Add `app3` as the default application when accessing the IP without a header.
-
-## Table of Contents
-
-- [Introduction](#introduction)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
-
-## Introduction
-
-The Inception of Things project is designed to help students learn about different technologies and how they can be combined to create a cohesive system. This project covers topics such as networking, virtualization, and containerization.
-
-## Installation
-
-To get started with the project, follow these steps:
-
-1. Clone the repository:
-    ```bash
-    git clone https://github.com/yourusername/inception-of-things.git
-    ```
-2. Navigate to the project directory:
-    ```bash
-    cd inception-of-things
-    ```
-3. Install the necessary dependencies:
-    ```bash
-    # Add installation commands here
-    ```
-
-## Usage
-
-To run the project, use the following command:
-```bash
-# Add usage commands here
+# Navigate to the project directory
+cd inception-of-things
 ```
 
-## Contributing
-
-We welcome contributions to the Inception of Things project! If you would like to contribute, please follow these steps:
-
-1. Fork the repository.
-2. Create a new branch for your feature or bugfix.
-3. Commit your changes and push them to your fork.
-4. Create a pull request with a detailed description of your changes.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
-
-
-Aquí tienes el archivo [`README.md`](command:_github.copilot.openRelativePath?%5B%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2Fhome%2Fmmateo-t%2F42Cursus%2Finception-of-things%2FREADME.md%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%5D "/home/mmateo-t/42Cursus/inception-of-things/README.md") actualizado con la tarea pendiente añadida:
-
-```markdown
-# Inception of Things
-
-## Overview
-
-Welcome to the Inception of Things project! This project is part of the 42Cursus and aims to provide a comprehensive understanding of various technologies and their integration.
-
-## Table of Contents
-
-- [Introduction](#introduction)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
-- [Todo](#todo)
-
-## Introduction
-
-The Inception of Things project is designed to help students learn about different technologies and how they can be combined to create a cohesive system. This project covers topics such as networking, virtualization, and containerization.
-
-## Installation
-
-To get started with the project, follow these steps:
-
-1. Clone the repository:
-    ```bash
-    git clone https://github.com/yourusername/inception-of-things.git
-    ```
-2. Navigate to the project directory:
-    ```bash
-    cd inception-of-things
-    ```
-3. Install the necessary dependencies:
-    ```bash
-    # Add installation commands here
-    ```
-
-## Usage
-
-To run the project, use the following command:
-```bash
-# Add usage commands here
+## 📂 Folder Structure
+```
+inception-of-things/
+├── p1/
+│   ├── scripts/
+│   │   ├── agent.sh
+│   │   └── server.sh
+│   └── Vagrantfile
+├── p2/
+│   ├── k3s-configs/
+│   │   ├── app-one/
+│   │   ├── app-three/
+│   │   ├── app-two/
+│   │   └── traefik/
+│   ├── scripts/
+│   │   └── server.sh
+│   └── Vagrantfile
+├── p3/
+│   ├── mmateo-t/
+│   ├── scripts/
+│   │   ├── deploy-argocd.sh
+│   │   └── install_k3d.sh
+│   ├── manifests/
+│   │   └── deployment.yaml
+│   └── README.md
+├── .gitignore
+├── Vagrantfile
+└── README.md
 ```
 
-## Contributing
+# READMEs
 
-We welcome contributions to the Inception of Things project! If you would like to contribute, please follow these steps:
+## [p1/ README](./p1/README.md)
+This folder contains the scripts and Vagrantfile for the first part of the project.
 
-1. Fork the repository.
-2. Create a new branch for your feature or bugfix.
-3. Commit your changes and push them to your fork.
-4. Create a pull request with a detailed description of your changes.
+## [p2/ README](./p2/README.md)
+This folder contains the k3s-configs, scripts, and Vagrantfile for the second part of the project.
 
-## License
+## [p3/ README](./p3/README.md)
+This folder contains the mmateo-t folder, scripts, manifests, and README.md for the third part of the project.
 
-This project is licensed under the MIT License. See the LICENSE file for more details.
 
+
+## 🤝 Contributing
+1. Fork the repository
+2. Create a new branch (`feature/your-feature`)
+3. Commit your changes (`git commit -m 'Add new feature'`)
+4. Push to the branch (`git push origin feature/your-feature`)
+5. Create a Pull Request
+
+## 📝 License
+This project is licensed under the [MIT License](LICENSE).
