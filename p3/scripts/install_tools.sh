@@ -37,25 +37,29 @@ install_k3d() {
 
 # Function to install kubectl on Ubuntu
 install_kubectl() {
-    echo "Updating package list..."
-    sudo apt update
+    # Check if kubectl is already installed
+    if command -v kubectl &> /dev/null; then
+        echo "kubectl is already installed"
+        exit 0
+    fi
     
-    echo "Installing required packages..."
-    sudo apt install -y apt-transport-https ca-certificates curl
+    # Define the architecture
+    ARCH="amd64"  # For most modern PCs. Use "arm64" for ARM architecture.
     
-    echo "Downloading Google Cloud public signing key..."
-    sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    # Download the latest release of kubectl
+    echo "Downloading kubectl..."
+    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/${ARCH}/kubectl"
     
-    echo "Adding Kubernetes APT repository..."
-    echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+    # Make the kubectl binary executable
+    echo "Making kubectl executable..."
+    chmod +x kubectl
     
-    echo "Updating package list again..."
-    sudo apt update
+    # Move the binary to a directory included in your system's PATH
+    echo "Moving kubectl to /usr/local/bin/..."
+    sudo mv kubectl /usr/local/bin/
     
-    echo "Installing kubectl..."
-    sudo apt install -y kubectl
-    
-    echo "Verifying installation..."
+    # Verify the installation
+    echo "Verifying kubectl installation..."
     kubectl version --client
     
     echo "kubectl installation completed successfully!"
