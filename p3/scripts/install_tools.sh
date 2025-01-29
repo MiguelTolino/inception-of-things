@@ -35,20 +35,31 @@ install_k3d() {
     fi
 }
 
-# Function to check and install kubectl
+# Function to install kubectl on Ubuntu
 install_kubectl() {
-    if ! command -v kubectl &> /dev/null; then
-        echo "kubectl is not installed. Installing..."
-        if sudo apt-get update && sudo apt-get install -y kubectl; then
-            echo "kubectl has been successfully installed"
-        else
-            echo "Error: Failed to install kubectl"
-            exit 1
-        fi
-    else
-        echo "kubectl is already installed"
-    fi
+    echo "Updating package list..."
+    sudo apt-get update
+
+    echo "Installing apt-transport-https..."
+    sudo apt-get install -y apt-transport-https
+
+    echo "Downloading Google Cloud public signing key..."
+    curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+
+    echo "Adding Kubernetes APT repository..."
+    echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+    echo "Updating package list again..."
+    sudo apt-get update
+
+    echo "Installing kubectl..."
+    sudo apt-get install -y kubectl
+
+    echo "kubectl has been successfully installed"
 }
+
+# Install kubectl
+install_kubectl
 
 # Install Docker
 install_docker
