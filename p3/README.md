@@ -22,8 +22,8 @@ This project demonstrates the setup of a Kubernetes development environment usin
 
 ## Components
 
-### 1. Installation Script (`install_k3d.sh`)
-- Automates the installation of K3d and kubectl
+### 1. Installation Script (`install_tools.sh`)
+- Automates the installation of K3d and kubectl and docker
 - Performs availability checks before installation
 - Ensures all necessary tools are present
 
@@ -56,6 +56,26 @@ Contains:
 3. Access the applications:
 - ArgoCD UI: https://localhost:8080
 - Web Application: http://localhost:8888
+
+## Change Application Version
+To change the version of the web application, you need to update the image tag in the `deployment.yaml` file located in the `manifests/` directory. 
+
+Open the `deployment.yaml` file and locate the line that specifies the image tag. It should look like this:
+
+```yaml
+image: wil42/playground:v1
+```
+
+Replace `v1` with the desired version of the application. For example, if you want to use version 2, the line should be:
+
+```yaml
+image: wil42/playground:v2
+```
+
+Save the changes and proceed with the deployment steps mentioned in the README.
+
+Remember to rebuild and push the updated image to the container registry before deploying the application with the new version.
+
 
 ## Features
 

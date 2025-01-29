@@ -3,6 +3,23 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
+# Function to check and install Docker
+install_docker() {
+    if ! command -v docker &> /dev/null; then
+        echo "Docker is not installed. Installing..."
+        if wget -q -O - https://get.docker.com/ | bash; then
+            echo "Docker has been successfully installed"
+            sudo usermod -aG docker $USER
+            newgrp docker
+        else
+            echo "Error: Failed to install Docker"
+            exit 1
+        fi
+    else
+        echo "Docker is already installed"
+    fi
+}
+
 # Function to check and install k3d
 install_k3d() {
     if ! command -v k3d &> /dev/null; then
@@ -18,7 +35,7 @@ install_k3d() {
     fi
 }
 
-# install kubectl check is installed
+# Function to check and install kubectl
 install_kubectl() {
     if ! command -v kubectl &> /dev/null; then
         echo "kubectl is not installed. Installing..."
@@ -33,8 +50,11 @@ install_kubectl() {
     fi
 }
 
-# install k3d
+# Install Docker
+install_docker
+
+# Install k3d
 install_k3d
 
-# install kubectl
+# Install kubectl
 install_kubectl

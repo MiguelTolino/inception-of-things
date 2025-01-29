@@ -9,6 +9,9 @@ REPO_URL="https://github.com/MiguelTolino/mmateo-t.git"
 APP_NAME="myapp"
 APP_PATH="./manifests"  # Cambiar si tus manifests están en otra ruta
 
+# 0. Clone repository
+git clone $REPO_URL
+
 # 1. Crear cluster K3d
 echo "🛠️  Creando cluster K3d..."
 k3d cluster create $CLUSTER_NAME
