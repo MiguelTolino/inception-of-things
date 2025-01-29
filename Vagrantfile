@@ -35,5 +35,13 @@ Vagrant.configure("2") do |config|
 
     # Instalamos herramientas adicionales
     sudo apt-get install -y git vim unzip wget
+
+    # Cambiar teclado a español
+    sudo localectl set-keymap es
+    sudo loadkeys es
+    localectl status
+
+
   SHELL
 end
+
