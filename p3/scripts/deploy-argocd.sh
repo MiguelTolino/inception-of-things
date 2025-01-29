@@ -67,8 +67,6 @@ argocd app create $APP_NAME \
 echo "🔄 Sincronizando aplicación..."
 argocd app sync $APP_NAME
 
-# 11. Port-forward de la aplicación
-kubectl port-forward svc/my-app-service 8888:8888 -n $APP_NS >/dev/null 2>&1 &
 
 # 11. Mostrar información
 echo -e "\n✅ ¡Despliegue completado!"
@@ -79,6 +77,9 @@ echo "Contraseña: $ARGOCD_PASSWORD"
 echo "Namespace de la aplicación: $APP_NS"
 echo "Repositorio: $REPO_URL"
 echo "======================================"
+
+# 11. Port-forward de la aplicación
+kubectl port-forward svc/my-app-service 8888:8888 -n $APP_NS >/dev/null 2>&1 &
 
 # Limpieza final
 # kill $PORT_FORWARD_PID
