@@ -37,9 +37,13 @@ spec:
                 name: app3-service
                 port:
                   number: 80
-  # Default (catch-all) for unmatched hostnames
-  defaultBackend:
-    service:
-      name: app3-service
-      port:
-        number: 80
+    # Default backend rule
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: app2-service
+                port:
+                  number: 80
