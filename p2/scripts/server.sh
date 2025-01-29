@@ -1,7 +1,8 @@
 #!/bin/bash
 
+curl -sfL https://get.k3s.io | sh -s - server --node-ip=192.168.56.110
+
 echo "Esperando que K3s esté listo..."
-sleep 30
 until sudo k3s kubectl get node | grep -q " Ready"; do
   sleep 5
   echo "Aún esperando que K3s esté listo..."
