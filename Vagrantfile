@@ -1,6 +1,6 @@
 Vagrant.configure("2") do |config|
-  # Use an Ubuntu box (e.g., Ubuntu 20.04)
-  config.vm.box = "ubuntu/focal64"
+  # Use the latest Fedora box
+  config.vm.box = "bento/fedora-latest"
 
   # Configure VirtualBox provider
   config.vm.provider "virtualbox" do |vb|
@@ -13,35 +13,39 @@ Vagrant.configure("2") do |config|
     # Allocate 4 CPU cores
     vb.cpus = 4
 
-    vb.name = "Ubuntu VM"
+    vb.name = "Fedora VM"
+    #AMD-V
+    vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
   end
 
-  # Install a desktop environment (e.g., GNOME)
+  # Install GNOME desktop environment
   config.vm.provision "shell", inline: <<-SHELL
-    apt-get update
-    apt-get install -y ubuntu-desktop
+    sudo dnf update -y
+    sudo dnf install @cinnamon-desktop-environment -y
+    sudo systemctl set-default graphical.target
+    #Dependencies
+    sudo dnf install -y @development-tools kernel-devel kernel-headers dkms elfutils-libelf-devel qt5-qtx11extras zlib-devel perl gcc make
+    #VirtualBox
+    wget https://download.virtualbox.org/virtualbox/7.2.2/VirtualBox-7.2-7.2.2_170484_fedora40-1.x86_64.rpm
+    sudo dnf install -y ./VirtualBox-7.2-7.2.2_170484_fedora40-1.x86_64.rpm
+    rm VirtualBox-7.2-7.2.2_170484_fedora40-1.x86_64.rpm
+    # Add user to vboxusers group (replace $USER if needed)
+    sudo usermod -aG vboxusers vagrant
 
-    # Instalamos dependencias básicas
-    sudo apt-get install -y build-essential dkms linux-headers-$(uname -r) apt-transport-https ca-certificates curl software-properties-common
+    # Add VirtualBox to PATH permanently
+    echo 'export PATH=$PATH:/usr/lib/virtualbox' | sudo tee /etc/profile.d/virtualbox.sh
+    sudo chmod +x /etc/profile.d/virtualbox.sh
+    source /etc/profile.d/virtualbox.sh
+    
+    #Vagrant
+    wget -O- https://rpm.releases.hashicorp.com/fedora/hashicorp.repo | sudo tee /etc/yum.repos.d/hashicorp.repo
+    sudo yum list available | grep hashicorp
+    sudo dnf update -y
+    sudo dnf -y install vagrant
 
-    # Instalamos VirtualBox
-    sudo apt-get install -y virtualbox
+    sudo reboot
 
-    # Instalamos Vagrant
-    curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
-    echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
-    sudo apt-get update -y
-    sudo apt-get install -y vagrant
-
-    # Instalamos herramientas adicionales
-    sudo apt-get install -y git vim unzip wget
-
-    # Cambiar teclado a español
-    sudo localectl set-keymap es
-    sudo loadkeys es
-    localectl status
-
-
+    #sudo /sbin/vboxconfig
+    #sudo modprobe -r kvm_amd
   SHELL
 end
-
